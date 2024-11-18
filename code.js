@@ -6,9 +6,19 @@ function fillBoard() {
 
     const sqaure = document.createElement('div');
     sqaure.className = "square";
+
+    sqaure.onclick = touchMe;
+
     board.appendChild(sqaure);
   }
 
+
+}
+
+function touchMe(e) {
+  console.log("you clicked a button");
+
+  e.target.style.backgroundColor = "green";
 
 }
 
