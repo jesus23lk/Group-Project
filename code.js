@@ -1,76 +1,87 @@
-var board = [];
-var rows = 8;
-var columns = 8;
+let board = [];
+let rows = 9;
+let columns = 9;
 
-var minesCount = 13;
-var minesLocation = [];
+let minesCount = 10;
+let minesLocation = [];
 
-var tilesClicked = 0; // goal to click all titles expect the one containing mines
-var flagEnabled = false;
+let tilesClicked = 0; // goal to click all titles expect the one containing mines
 
-var gameOver = false;
+let gameOver = false;
 
 window.onload = function() {
     startGame();
 }
+
 function setMines() { // random location of mines
+
   let minesLeft = minesCount;
+
   while (minesLeft > 0 ) {
-    let r = Math.floor(Math.random() * rows);
+
+    let r = Math.floor(Math.random() * rows);    
     let c = Math.floor(Math.random() * columns);
+
     let id = r.toString() + "-" + c.toString();
 
     if (!minesLocation.includes(id)) {
+        
+        //Enter if the random location we just generated is not in the array
+
         minesLocation.push(id);
-        minesLeft -= 1; // if theres already mine, there put somewhere else 
+        minesLeft--; // if theres already mine, there put somewhere else 
+
     }
   }
 }
 
 function startGame() {
+
     document.getElementById("mines-count").innerText = minesCount;
-    document.getElementById("flag-button").addEventListener("click", setFlag); 
     setMines();
 
     //populating the board
     for (let r = 0; r < rows; r++) {
-        let row = []; // array 
+
+        let row = []; // array with dom nodes to each tile in our board
+
         for (let c = 0; c < columns; c++) {
+
             //created: <div id "0-0, 1,1..."></div>
             let tile = document.createElement("div");
             tile.id = r.toString() + "-" + c.toString(); // position of each tile
-            tile.addEventListener("click", clickTile); // being able to click
+            tile.className = "tile";
+
+            tile.onclick = clickTile;       //left click functionality
+            tile.oncontextmenu = clickTile; //right click functionality
+
             document.getElementById("board").append(tile);
             row.push(tile);
         }
+
         board.push(row); // pushing row into board;
     }
+
 }
 
-function setFlag() {
-    if (flagEnabled) {
-        flagEnabled = false;
-        document.getElementById("flag-button").style.backgroundColor = "lightgrey";
-    }
-    else {
-        flagEnabled = true;
-        document.getElementById("flag-button").style.backgroundColor = "darkblue";
-    }
-}
+function clickTile(e) {
 
-function clickTile() {
+    e.preventDefault();
+    let tile = this;
+
     if (gameOver || this.classList.contains("tile-clicked")) {
+        //Exit function if game is over or if user has clicked a tile that was already clicked
+        
         return;
     }
 
-    let tile = this;
-    if (flagEnabled) {
-        if(tile.innerText == "") {
-            tile.innerText = "🚩"
-        }
-        else if (tile.innerText == "🚩") {
-            tile.innerText = ""; // if you want to take off
-        }
+    if (e.type === "contextmenu") {
+        //if statement enetered only if the user did a right click
+
+        if (tile.innerText == "")  tile.innerText = "🚩"
+
+        else if (tile.innerText == "🚩") tile.innerText = ""; // if you want to take off
+
         return;
     }
 
@@ -81,17 +92,23 @@ function clickTile() {
         return;
     }
 
-    let coords = tile.id.split("-"); // "0-0" -> [0,0]
+    let coords = tile.id.split("-"); 
+    console.log(coords)
     let r = parseInt(coords[0]);
     let c = parseInt(coords[1]);
     checkMine(r,c);
 }
 
 function revealMines() {
+
     for (let r = 0; r < rows; r++) {
+
         for (let c = 0; c < columns; c++) {
+
             let tile = board[r][c];
+
             if(minesLocation.includes(tile.id)){
+
                 tile.innerText = "💣";
                 tile.style.backgroundColor = "red";
             }
@@ -100,13 +117,15 @@ function revealMines() {
 }
 
 function checkMine(r, c) {
-    // Check for out-of-bounds or already clicked tiles
-    if (r < 0 || r >= rows || c < 0 || c >= columns) {
-        return;
-    }
-    if (board[r][c].classList.contains("tile-clicked")) {
-        return;
-    }
+
+    // console.log(board[r][c]);
+
+    if (r < 0 || r >= rows || c < 0 || c >= columns) return; //Check for tiles that are out of bounds here
+    
+
+    if (board[r][c].classList.contains("tile-clicked")) return; //Check for tiles that have already been clicked here
+
+    if (board[r][c].innerText == "🚩") return;  //check for tiles that have a flag
 
     board[r][c].classList.add("tile-clicked");
     tilesClicked += 1;
@@ -123,10 +142,14 @@ function checkMine(r, c) {
     minesFound += checkTile(r + 1, c + 1); // bottom-right
 
     if (minesFound > 0) {
+
         // If adjacent mines are found, display the count and stop recursion
         board[r][c].innerText = minesFound;
         board[r][c].classList.add("x" + minesFound.toString());
-    } else {
+    } 
+    
+    else {
+
         // If no adjacent mines, recursively reveal all surrounding tiles
         checkMine(r - 1, c - 1); // top-left
         checkMine(r - 1, c);     // top
@@ -147,12 +170,15 @@ function checkMine(r, c) {
 
 
 function checkTile(r,c) {
+
     if (r < 0 || r >= rows || c < 0 || c >= columns) {
         return 0;
     } // checking for out of bounds
+
     if (minesLocation.includes(r.toString() + "-" + c.toString())) {
         return 1;
     } else {return 0;}
+
 }
 
 
