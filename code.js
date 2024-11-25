@@ -2,7 +2,7 @@ const g = { // global object to hold all global variables
     board: [],
     rows: 9,
     columns: 9,
-    minesCount: 10,
+    minesCount: 3,         //number of actual mines on the board
     minesLocation: [],
     tilesClicked: 0, // goal to click all tiles except the ones containing mines
     gameStarted: false,
@@ -12,7 +12,9 @@ const g = { // global object to hold all global variables
 };
 
 const sounds = {
-    death: new Audio("GTA_5_Sound_Effect.mp3")
+    death: new Audio("GTA_5_Sound_Effect.mp3"),
+    win: new Audio("pokemon_winning.mp3"),
+    game: new Audio("pizza_parlor.mp3")
 };
 
 window.onload = function() {
@@ -23,7 +25,7 @@ function startTimer() {
     const timeElapsed = document.getElementById("time-elapsed");
     let timeString = ""; // time value to be actually displayed to user
     g.numSeconds = 0; // Reset the timer on game start
-    timeElapsed.textContent = "000"; // Display initial 000 time
+    timeElapsed.textContent = "001"; // Display initial 000 time
 
     // Store the interval ID in the global object
     g.timeInterval = setInterval(() => {
@@ -89,20 +91,29 @@ function clickTile(e) {
     let tile = this;
 
     if (g.gameOver || this.classList.contains("tile-clicked")) { 
+
         return; // Exit function if game is over or if user has clicked a tile that was already clicked
     }
 
     if (e.type === "contextmenu") {
+
         // If statement entered only if the user did a right click
         if (tile.textContent == "") tile.textContent = "🚩";
         else if (tile.textContent == "🚩") tile.textContent = ""; // remove flag
         return;
     }
 
-    if (g.tilesClicked === 0) startTimer(); // Start timer on the first tile click
+    if (g.tilesClicked === 0) {
+     
+     startTimer(); // Start timer on the first tile click
+     sounds.game.loop = true;
+     sounds.game.play();  //music while player plays game
+
+    }
 
     if (g.minesLocation.includes(tile.id)) {
         g.gameOver = true;
+        sounds.game.pause();
         sounds.death.play();
         revealMines();
         stopTimer(); // Stop the timer when game is over
@@ -117,9 +128,13 @@ function clickTile(e) {
 
 function revealMines() {
     for (let r = 0; r < g.rows; r++) {
+
         for (let c = 0; c < g.columns; c++) {
+
             let tile = g.board[r][c];
+
             if (g.minesLocation.includes(tile.id)) {
+
                 tile.textContent = "💣";
                 tile.style.backgroundColor = "red";
             }
@@ -128,6 +143,7 @@ function revealMines() {
 }
 
 function checkMine(r, c) {
+
     if (r < 0 || r >= g.rows || c < 0 || c >= g.columns) return; // Check for tiles that are out of bounds
     if (g.board[r][c].classList.contains("tile-clicked")) return; // Check for tiles that have already been clicked
     if (g.board[r][c].textContent == "🚩") return;  // Check for tiles that have a flag
@@ -149,7 +165,10 @@ function checkMine(r, c) {
     if (minesFound > 0) {
         g.board[r][c].textContent = minesFound;
         g.board[r][c].classList.add("x" + minesFound.toString());
-    } else {
+    } 
+    
+    else {
+
         checkMine(r - 1, c - 1); // top-left
         checkMine(r - 1, c);     // top
         checkMine(r - 1, c + 1); // top-right
@@ -160,8 +179,15 @@ function checkMine(r, c) {
         checkMine(r + 1, c + 1); // bottom-right
     }
 
-    // Check if all non-mine tiles have been clicked
     if (g.tilesClicked == g.rows * g.columns - g.minesCount) {
+        //Check here if player has won
+
+        //handle sound playing
+        sounds.game.pause();            //Stop playing game music
+        sounds.win.currentTime = 1;     //start the song after one second
+        sounds.win.play();
+        setTimeout(() => { sounds.win.pause() }, 5000); //pause after 5 seconds
+
         document.getElementById("mines-count").textContent = "Cleared";
         g.gameOver = true;
         stopTimer(); // Stop the timer if the game is won
@@ -169,12 +195,11 @@ function checkMine(r, c) {
 }
 
 function checkTile(r, c) {
-    if (r < 0 || r >= g.rows || c < 0 || c >= g.columns) {
-        return 0;
-    } // checking for out of bounds
-    if (g.minesLocation.includes(r.toString() + "-" + c.toString())) {
-        return 1;
-    } else {
-        return 0;
-    }
+
+    if (r < 0 || r >= g.rows || c < 0 || c >= g.columns) return 0; // checking for out of bounds
+
+    if (g.minesLocation.includes(r.toString() + "-" + c.toString())) return 1;
+    
+    else return 0;
+    
 }
