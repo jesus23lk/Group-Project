@@ -8,7 +8,12 @@ const g = { //global object to hold all global variables
     gameStarted: false,
     numSeconds: 0,
     gameOver: false
-}
+};
+
+const sounds = {
+    death: new Audio("GTA_5_Sound_Effect.mp3")
+
+};
 
 window.onload = function() {
     setupBoard();
@@ -110,6 +115,7 @@ function clickTile(e) {
     if(g.minesLocation.includes(tile.id)) {
        // alert("Game Over"); // if you click on mine
         g.gameOver = true;
+        sounds.death.play();
         revealMines();
         return;
     }
@@ -185,6 +191,7 @@ function checkMine(r, c) {
 
     // Check if all non-mine tiles have been clicked
     if (g.tilesClicked == g.rows * g.columns - g.minesCount) {
+
         document.getElementById("mines-count").textContent = "Cleared";
         g.gameOver = true;
     }
@@ -199,7 +206,9 @@ function checkTile(r,c) {
 
     if (g.minesLocation.includes(r.toString() + "-" + c.toString())) {
         return 1;
-    } else {return 0;}
+    } 
+    
+    else return 0;
 
 }
 
