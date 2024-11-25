@@ -7,17 +7,17 @@ const g = { //global object to hold all global variables
     tilesClicked: 0, // goal to click all titles expect the one containing mines
     gameStarted: false,
     numSeconds: 0,
-    gameOver: false
+    gameOver: false,
+    timeInterval: null // Store the interval ID here
 };
 
 const sounds = {
     death: new Audio("GTA_5_Sound_Effect.mp3")
-
 };
 
 window.onload = function() {
     setupBoard();
-}
+};
 
 function startTimer() {
 
@@ -191,7 +191,6 @@ function checkMine(r, c) {
 
     // Check if all non-mine tiles have been clicked
     if (g.tilesClicked == g.rows * g.columns - g.minesCount) {
-
         document.getElementById("mines-count").textContent = "Cleared";
         g.gameOver = true;
     }
