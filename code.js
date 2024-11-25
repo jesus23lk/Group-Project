@@ -1,51 +1,75 @@
-let board = [];
-let rows = 9;
-let columns = 9;
-
-let minesCount = 10;
-let minesLocation = [];
-
-let tilesClicked = 0; // goal to click all titles expect the one containing mines
-
-let gameOver = false;
+const g = { //global object to hold all global variables
+    board: [],
+    rows: 9,
+    columns: 9,
+    minesCount: 10,
+    minesLocation: [],
+    tilesClicked: 0, // goal to click all titles expect the one containing mines
+    gameStarted: false,
+    numSeconds: 0,
+    gameOver: false
+}
 
 window.onload = function() {
-    startGame();
+    setupBoard();
+}
+
+function startTimer() {
+
+    const timeElapsed = document.getElementById("time-elapsed");
+    let timeString = ""; //time value to be actually displayed to user
+    g.numSeconds++;
+    timeElapsed.textContent = "001";
+
+    setInterval(() => {
+
+        g.numSeconds++;
+
+        if (g.numSeconds < 10) timeString = "00" + g.numSeconds;
+
+        else if (g.numSeconds < 100) timeString = "0" + g.numSeconds;
+
+        else timeString = g.numSeconds;
+
+        timeElapsed.textContent = timeString;
+
+        
+    }, 1000);
 }
 
 function setMines() { // random location of mines
 
-  let minesLeft = minesCount;
+  let minesLeft = g.minesCount;
 
   while (minesLeft > 0 ) {
 
-    let r = Math.floor(Math.random() * rows);    
-    let c = Math.floor(Math.random() * columns);
+    let r = Math.floor(Math.random() * g.rows);    
+    let c = Math.floor(Math.random() * g.columns);
 
     let id = r.toString() + "-" + c.toString();
 
-    if (!minesLocation.includes(id)) {
+    if (!g.minesLocation.includes(id)) {
         
         //Enter if the random location we just generated is not in the array
 
-        minesLocation.push(id);
+        g.minesLocation.push(id);
         minesLeft--; // if theres already mine, there put somewhere else 
 
     }
   }
 }
 
-function startGame() {
+function setupBoard() {
 
-    document.getElementById("mines-count").innerText = minesCount;
+    document.getElementById("mines-count").textContent = g.minesCount;
     setMines();
 
     //populating the board
-    for (let r = 0; r < rows; r++) {
+    for (let r = 0; r < g.rows; r++) {
 
         let row = []; // array with dom nodes to each tile in our board
 
-        for (let c = 0; c < columns; c++) {
+        for (let c = 0; c < g.columns; c++) {
 
             //created: <div id "0-0, 1,1..."></div>
             let tile = document.createElement("div");
@@ -59,7 +83,7 @@ function startGame() {
             row.push(tile);
         }
 
-        board.push(row); // pushing row into board;
+        g.board.push(row); // pushing row into board;
     }
 
 }
@@ -69,25 +93,23 @@ function clickTile(e) {
     e.preventDefault();
     let tile = this;
 
-    if (gameOver || this.classList.contains("tile-clicked")) {
-        //Exit function if game is over or if user has clicked a tile that was already clicked
-        
-        return;
-    }
+    if (g.gameOver || this.classList.contains("tile-clicked")) return; //Exit function if game is over or if user has clicked a tile that was already clicked
 
     if (e.type === "contextmenu") {
         //if statement enetered only if the user did a right click
 
-        if (tile.innerText == "")  tile.innerText = "🚩"
+        if (tile.textContent == "")  tile.textContent = "🚩"
 
-        else if (tile.innerText == "🚩") tile.innerText = ""; // if you want to take off
+        else if (tile.textContent == "🚩") tile.textContent = ""; // if you want to take off
 
         return;
     }
 
-    if(minesLocation.includes(tile.id)) {
+    if (g.tilesClicked === 0) startTimer(); // TODO: implement this functionality for a timer
+
+    if(g.minesLocation.includes(tile.id)) {
        // alert("Game Over"); // if you click on mine
-        gameOver = true;
+        g.gameOver = true;
         revealMines();
         return;
     }
@@ -101,15 +123,15 @@ function clickTile(e) {
 
 function revealMines() {
 
-    for (let r = 0; r < rows; r++) {
+    for (let r = 0; r < g.rows; r++) {
 
-        for (let c = 0; c < columns; c++) {
+        for (let c = 0; c < g.columns; c++) {
 
-            let tile = board[r][c];
+            let tile = g.board[r][c];
 
-            if(minesLocation.includes(tile.id)){
+            if(g.minesLocation.includes(tile.id)){
 
-                tile.innerText = "💣";
+                tile.textContent = "💣";
                 tile.style.backgroundColor = "red";
             }
         }
@@ -120,15 +142,15 @@ function checkMine(r, c) {
 
     // console.log(board[r][c]);
 
-    if (r < 0 || r >= rows || c < 0 || c >= columns) return; //Check for tiles that are out of bounds here
+    if (r < 0 || r >= g.rows || c < 0 || c >= g.columns) return; //Check for tiles that are out of bounds here
     
 
-    if (board[r][c].classList.contains("tile-clicked")) return; //Check for tiles that have already been clicked here
+    if (g.board[r][c].classList.contains("tile-clicked")) return; //Check for tiles that have already been clicked here
 
-    if (board[r][c].innerText == "🚩") return;  //check for tiles that have a flag
+    if (g.board[r][c].textContent == "🚩") return;  //check for tiles that have a flag
 
-    board[r][c].classList.add("tile-clicked");
-    tilesClicked += 1;
+    g.board[r][c].classList.add("tile-clicked");
+    g.tilesClicked++;
 
     // Count adjacent mines
     let minesFound = 0;
@@ -144,8 +166,8 @@ function checkMine(r, c) {
     if (minesFound > 0) {
 
         // If adjacent mines are found, display the count and stop recursion
-        board[r][c].innerText = minesFound;
-        board[r][c].classList.add("x" + minesFound.toString());
+        g.board[r][c].textContent = minesFound;
+        g.board[r][c].classList.add("x" + minesFound.toString());
     } 
     
     else {
@@ -162,20 +184,20 @@ function checkMine(r, c) {
     }
 
     // Check if all non-mine tiles have been clicked
-    if (tilesClicked == rows * columns - minesCount) {
-        document.getElementById("mines-count").innerText = "Cleared";
-        gameOver = true;
+    if (g.tilesClicked == g.rows * g.columns - g.minesCount) {
+        document.getElementById("mines-count").textContent = "Cleared";
+        g.gameOver = true;
     }
 }
 
 
 function checkTile(r,c) {
 
-    if (r < 0 || r >= rows || c < 0 || c >= columns) {
+    if (r < 0 || r >= g.rows || c < 0 || c >= g.columns) {
         return 0;
     } // checking for out of bounds
 
-    if (minesLocation.includes(r.toString() + "-" + c.toString())) {
+    if (g.minesLocation.includes(r.toString() + "-" + c.toString())) {
         return 1;
     } else {return 0;}
 

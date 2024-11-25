@@ -58,3 +58,7 @@ body {
 .x8 {
     color: grey;
 }
+
+#mines-count {
+    margin-right: 150px;
+}
