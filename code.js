@@ -2,7 +2,8 @@ const g = { // global object to hold all global variables
     board: [],
     rows: 9,
     columns: 9,
-    minesCount: 10,
+    minesCount: 10, // acutal mine
+    flaggedCount: 0, //flag count
     minesLocation: [],
     tilesClicked: 0, // goal to click all tiles except the ones containing mines
     gameStarted: false,
@@ -94,8 +95,16 @@ function clickTile(e) {
 
     if (e.type === "contextmenu") {
         // If statement entered only if the user did a right click
-        if (tile.textContent == "") tile.textContent = "🚩";
-        else if (tile.textContent == "🚩") tile.textContent = ""; // remove flag
+        if (tile.textContent == "") {
+            tile.textContent = "🚩";
+            g.flaggedCount++;
+            document.getElementById("mines-count").textContent = g.minesCount -g.flaggedCount;
+        }
+        else if (tile.textContent == "🚩"){
+         tile.textContent = ""; // remove flag
+         g.flaggedCount--;
+         document.getElementById("mines-count").textContent = g.minesCount -g.flaggedCount;
+        }
         return;
     }
 
@@ -178,3 +187,36 @@ function checkTile(r, c) {
         return 0;
     }
 }
+function restartGame() {
+    // Reset the game variables
+    g.board = [];
+    g.tilesClicked = 0;
+    g.minesLocation = [];
+    g.gameOver = false;
+    g.flaggedCount = 0;
+    g.numSeconds = 0;
+    
+    // Reset the UI elements
+    document.getElementById("mines-count").textContent = g.minesCount; // Display initial mines count
+    document.getElementById("time-elapsed").textContent = "000"; // Reset timer display
+    
+    // Clear the board UI
+    const boardElement = document.getElementById("board");
+    boardElement.innerHTML = ""; // Remove all existing tiles
+    
+    // Set up the new board
+    setupBoard(); // This will rebuild the board and reinitialize the mines and tiles
+
+    // If the game was previously over, reset the game-over state
+    if (g.gameOver) {
+        g.gameOver = false;
+    }
+    
+    // Stop the timer if it was running
+    stopTimer();
+    
+    // Optional: Reset flag count
+    g.flaggedCount = 0;
+    document.getElementById("mines-count").textContent = g.minesCount;
+}
+document.getElementById("restart-button").addEventListener("click", restartGame);
