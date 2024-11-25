@@ -9,11 +9,15 @@ const g = { // global object to hold all global variables
     numSeconds: 0,
     gameOver: false,
     timeInterval: null // Store the interval ID here
-}
+};
+
+const sounds = {
+    death: new Audio("GTA_5_Sound_Effect.mp3")
+};
 
 window.onload = function() {
     setupBoard();
-}
+};
 
 function startTimer() {
     const timeElapsed = document.getElementById("time-elapsed");
@@ -90,7 +94,7 @@ function clickTile(e) {
 
     if (e.type === "contextmenu") {
         // If statement entered only if the user did a right click
-        if (tile.textContent == "")  tile.textContent = "🚩";
+        if (tile.textContent == "") tile.textContent = "🚩";
         else if (tile.textContent == "🚩") tile.textContent = ""; // remove flag
         return;
     }
@@ -99,6 +103,7 @@ function clickTile(e) {
 
     if (g.minesLocation.includes(tile.id)) {
         g.gameOver = true;
+        sounds.death.play();
         revealMines();
         stopTimer(); // Stop the timer when game is over
         return;
