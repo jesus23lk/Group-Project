@@ -1,28 +1,47 @@
-const g = { // global object to hold all global variables
+const difficultySetting = {
+    easy: { rows: 8, columns: 10, minesCount: 10 },
+    medium: { rows: 15, columns: 18, minesCount: 40 },
+    hard: { rows: 20, columns: 24, minesCount: 99 }
+};
+
+const g = { // Global object to hold all game variables
     board: [],
-    rows: 9,
-    columns: 9,
-    minesCount: 10, // acutal mine
-    flaggedCount: 0, //flag count
+    rows: 8,
+    columns: 10,
+    minesCount: 10, // Actual mine count
+    flaggedCount: 0, // Flag count
     minesLocation: [],
-    tilesClicked: 0, // goal to click all tiles except the ones containing mines
+    tilesClicked: 0, // Goal to click all tiles except the ones containing mines
     gameStarted: false,
     numSeconds: 0,
     gameOver: false,
     timeInterval: null // Store the interval ID here
 };
 
+// Event listener for difficulty selection
+document.getElementById("difficulty").addEventListener("change", (e) => {
+    const difficulty = e.target.value;
+
+    // Updating global settings based on difficulty 
+    g.rows = difficultySetting[difficulty].rows;
+    g.columns = difficultySetting[difficulty].columns;
+    g.minesCount = difficultySetting[difficulty].minesCount;
+
+    // Restart the game with the new settings
+    restartGame();
+});
+
 const sounds = {
     death: new Audio("GTA_5_Sound_Effect.mp3")
 };
 
-window.onload = function() {
+window.onload = function () {
     setupBoard();
 };
 
 function startTimer() {
     const timeElapsed = document.getElementById("time-elapsed");
-    let timeString = ""; // time value to be actually displayed to user
+    let timeString = ""; // Time value to be displayed to the user
     g.numSeconds = 0; // Reset the timer on game start
     timeElapsed.textContent = "000"; // Display initial 000 time
 
@@ -46,7 +65,7 @@ function stopTimer() {
     }
 }
 
-function setMines() { // random location of mines
+function setMines() { // Random location of mines
     let minesLeft = g.minesCount;
 
     while (minesLeft > 0) {
@@ -65,23 +84,28 @@ function setupBoard() {
     document.getElementById("mines-count").textContent = g.minesCount;
     setMines();
 
-    // populating the board
+    // Populating the board
+    const boardElement = document.getElementById("board");
+    boardElement.style.gridTemplateColumns = "repeat(" + g.columns + ", 1fr)";
+    boardElement.style.gridTemplateRows = "repeat(" + g.rows + ", 1fr)";
+    boardElement.innerHTML = ""; // Clear existing tiles
+
     for (let r = 0; r < g.rows; r++) {
-        let row = []; // array with DOM nodes to each tile in our board
+        let row = []; // Array with DOM nodes for each tile in the board
 
         for (let c = 0; c < g.columns; c++) {
             let tile = document.createElement("div");
-            tile.id = r.toString() + "-" + c.toString(); // position of each tile
+            tile.id = r.toString() + "-" + c.toString(); // Position of each tile
             tile.className = "tile";
 
-            tile.onclick = clickTile; // left click functionality
-            tile.oncontextmenu = clickTile; // right click functionality
+            tile.onclick = clickTile; // Left-click functionality
+            tile.oncontextmenu = clickTile; // Right-click functionality
 
-            document.getElementById("board").append(tile);
+            boardElement.append(tile);
             row.push(tile);
         }
 
-        g.board.push(row); // pushing row into board
+        g.board.push(row); // Push row into board
     }
 }
 
@@ -89,21 +113,20 @@ function clickTile(e) {
     e.preventDefault();
     let tile = this;
 
-    if (g.gameOver || this.classList.contains("tile-clicked")) { 
+    if (g.gameOver || tile.classList.contains("tile-clicked")) {
         return; // Exit function if game is over or if user has clicked a tile that was already clicked
     }
 
     if (e.type === "contextmenu") {
-        // If statement entered only if the user did a right click
-        if (tile.textContent == "") {
+        // If statement entered only if the user did a right-click
+        if (tile.textContent === "") {
             tile.textContent = "🚩";
             g.flaggedCount++;
-            document.getElementById("mines-count").textContent = g.minesCount -g.flaggedCount;
-        }
-        else if (tile.textContent == "🚩"){
-         tile.textContent = ""; // remove flag
-         g.flaggedCount--;
-         document.getElementById("mines-count").textContent = g.minesCount -g.flaggedCount;
+            document.getElementById("mines-count").textContent = g.minesCount - g.flaggedCount;
+        } else if (tile.textContent === "🚩") {
+            tile.textContent = ""; // Remove flag
+            g.flaggedCount--;
+            document.getElementById("mines-count").textContent = g.minesCount - g.flaggedCount;
         }
         return;
     }
@@ -139,38 +162,38 @@ function revealMines() {
 function checkMine(r, c) {
     if (r < 0 || r >= g.rows || c < 0 || c >= g.columns) return; // Check for tiles that are out of bounds
     if (g.board[r][c].classList.contains("tile-clicked")) return; // Check for tiles that have already been clicked
-    if (g.board[r][c].textContent == "🚩") return;  // Check for tiles that have a flag
+    if (g.board[r][c].textContent === "🚩") return; // Check for tiles that have a flag
 
     g.board[r][c].classList.add("tile-clicked");
     g.tilesClicked++;
 
     // Count adjacent mines
     let minesFound = 0;
-    minesFound += checkTile(r - 1, c - 1); // top-left
-    minesFound += checkTile(r - 1, c);     // top
-    minesFound += checkTile(r - 1, c + 1); // top-right
-    minesFound += checkTile(r, c - 1);     // left
-    minesFound += checkTile(r, c + 1);     // right
-    minesFound += checkTile(r + 1, c - 1); // bottom-left
-    minesFound += checkTile(r + 1, c);     // bottom
-    minesFound += checkTile(r + 1, c + 1); // bottom-right
+    minesFound += checkTile(r - 1, c - 1); // Top-left
+    minesFound += checkTile(r - 1, c);     // Top
+    minesFound += checkTile(r - 1, c + 1); // Top-right
+    minesFound += checkTile(r, c - 1);     // Left
+    minesFound += checkTile(r, c + 1);     // Right
+    minesFound += checkTile(r + 1, c - 1); // Bottom-left
+    minesFound += checkTile(r + 1, c);     // Bottom
+    minesFound += checkTile(r + 1, c + 1); // Bottom-right
 
     if (minesFound > 0) {
         g.board[r][c].textContent = minesFound;
         g.board[r][c].classList.add("x" + minesFound.toString());
     } else {
-        checkMine(r - 1, c - 1); // top-left
-        checkMine(r - 1, c);     // top
-        checkMine(r - 1, c + 1); // top-right
-        checkMine(r, c - 1);     // left
-        checkMine(r, c + 1);     // right
-        checkMine(r + 1, c - 1); // bottom-left
-        checkMine(r + 1, c);     // bottom
-        checkMine(r + 1, c + 1); // bottom-right
+        checkMine(r - 1, c - 1); // Top-left
+        checkMine(r - 1, c);     // Top
+        checkMine(r - 1, c + 1); // Top-right
+        checkMine(r, c - 1);     // Left
+        checkMine(r, c + 1);     // Right
+        checkMine(r + 1, c - 1); // Bottom-left
+        checkMine(r + 1, c);     // Bottom
+        checkMine(r + 1, c + 1); // Bottom-right
     }
 
     // Check if all non-mine tiles have been clicked
-    if (g.tilesClicked == g.rows * g.columns - g.minesCount) {
+    if (g.tilesClicked === g.rows * g.columns - g.minesCount) {
         document.getElementById("mines-count").textContent = "Cleared";
         g.gameOver = true;
         stopTimer(); // Stop the timer if the game is won
@@ -180,13 +203,14 @@ function checkMine(r, c) {
 function checkTile(r, c) {
     if (r < 0 || r >= g.rows || c < 0 || c >= g.columns) {
         return 0;
-    } // checking for out of bounds
+    } // Check for out of bounds
     if (g.minesLocation.includes(r.toString() + "-" + c.toString())) {
         return 1;
     } else {
         return 0;
     }
 }
+
 function restartGame() {
     // Reset the game variables
     g.board = [];
@@ -195,28 +219,16 @@ function restartGame() {
     g.gameOver = false;
     g.flaggedCount = 0;
     g.numSeconds = 0;
-    
+
     // Reset the UI elements
     document.getElementById("mines-count").textContent = g.minesCount; // Display initial mines count
     document.getElementById("time-elapsed").textContent = "000"; // Reset timer display
-    
-    // Clear the board UI
-    const boardElement = document.getElementById("board");
-    boardElement.innerHTML = ""; // Remove all existing tiles
-    
-    // Set up the new board
-    setupBoard(); // This will rebuild the board and reinitialize the mines and tiles
 
-    // If the game was previously over, reset the game-over state
-    if (g.gameOver) {
-        g.gameOver = false;
-    }
-    
+    // Clear the board UI and set up a new board
+    setupBoard();
+
     // Stop the timer if it was running
     stopTimer();
-    
-    // Optional: Reset flag count
-    g.flaggedCount = 0;
-    document.getElementById("mines-count").textContent = g.minesCount;
 }
+
 document.getElementById("restart-button").addEventListener("click", restartGame);
