@@ -1,0 +1,116 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Light Gray Background */
+    color: #003366; /* Fresno State Blue for Text */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+header {
+    background-color: #CE1126; /* Fresno State Red */
+    color: white; /* White text */
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+header p {
+    font-size: 1.2em;
+    margin: 5px 0 0;
+}
+
+/* Navigation */
+nav {
+    background-color: #003366; /* Fresno State Blue */
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none; /* Removes underline */
+    margin: 0 15px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Main Content */
+main {
+    padding: 20px;
+}
+
+main section {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #003366; /* Blue Border */
+    background-color: #FFFFFF; /* White Background */
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle Shadow */
+}
+
+main h2 {
+    color: #CE1126; /* Fresno State Red */
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+main ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+main ul li {
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+/* General Link Styling */
+a {
+    text-decoration: none; /* Removes underline */
+    color: #CE1126; /* Fresno State Red */
+}
+
+a:hover {
+    text-decoration: underline; /* Adds underline back on hover */
+}
+
+/* Specific Styling for Leaderboard Link */
+.leaderboard-link {
+    text-decoration: none; /* Removes underline for leaderboard links */
+    color: #CE1126; /* Fresno State Red */
+}
+
+.leaderboard-link:hover {
+    text-decoration: underline;
+}
+
+/* Specific Styling for Contact Link */
+.contact-link {
+    text-decoration: none; /* Removes underline for contact links */
+    color: #CE1126; /* Fresno State Red */
+}
+
+.contact-link:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    background-color: #003366; /* Fresno State Blue */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
