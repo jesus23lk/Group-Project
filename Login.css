@@ -1,0 +1,83 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Light Gray Background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Login Container */
+.login-container {
+    background-color: #ffffff;
+    border: 3px solid #003366; /* Fresno State Blue */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    max-width: 90%;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Title */
+.login-container h1 {
+    font-size: 2.2em;
+    color: #CE1126; /* Fresno State Red */
+    margin-bottom: 10px;
+}
+
+/* Sub-title */
+.login-container p {
+    font-size: 1.2em;
+    color: #555555;
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 85%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #003366; /* Fresno State Blue */
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* Button */
+.login-container button {
+    width: 85%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #CE1126; /* Fresno State Red */
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #9e0d1b; /* Darker Red for Hover */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .login-container {
+        padding: 15px;
+    }
+
+    .login-container h1 {
+        font-size: 1.8em;
+    }
+
+    .login-container input,
+    .login-container button {
+        width: 90%;
+    }
+}

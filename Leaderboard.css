@@ -1,0 +1,77 @@
+/* Navigation Bar */
+nav {
+    background-color: #003366; /* Fresno State Blue */
+    width: 100%; /* Full width */
+    padding: 10px 0; /* Padding for height */
+    text-align: center; /* Centers links */
+    margin-bottom: 20px; /* Space below the nav */
+    position: sticky; /* Sticks to the top of the page */
+    top: 0;
+    z-index: 1000; /* Ensures it stays on top */
+}
+
+nav a {
+    color: #ffffff; /* White text */
+    text-decoration: none; /* Removes underline */
+    margin: 0 15px; /* Spacing between links */
+    font-size: 1.1em; /* Slightly larger font */
+    font-weight: bold;
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+nav a:hover {
+    color: #CE1126; /* Fresno State Red on hover */
+}
+
+/* Leaderboard Container */
+.leaderboard-container {
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff; /* White Background */
+    border: 2px solid #003366; /* Fresno State Blue */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle Shadow */
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.leaderboard-container h1 {
+    color: #CE1126; /* Fresno State Red */
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.leaderboard-container p {
+    color: #555555;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    border: 1px solid #003366; /* Fresno State Blue */
+    padding: 10px;
+    text-align: center;
+}
+
+table th {
+    background-color: #003366; /* Fresno State Blue */
+    color: #ffffff; /* White Text */
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light Gray Rows */
+}
+
+table tr:hover {
+    background-color: #ececec; /* Highlighted Row */
+}

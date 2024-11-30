@@ -1,67 +1,124 @@
-/* General page styles */
+/* General Styles */
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    text-align: center;
-    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Light Gray Background */
+    color: #003366; /* Fresno State Blue for Text */
     margin: 0;
     padding: 0;
-}
-
-/* Board container */
-#board {
-    display: grid; /* Ensures a grid layout for the board */
-    margin: 20px auto; /* Centers the board on the page */
-    background-color: lightgray; /* Board background */
-    border: 2px solid darkgray; /* Visible border for the board */
-    width: fit-content; /* Ensure the width adjusts dynamically to content */
-    height: fit-content; /* Ensure the height adjusts dynamically to content */
-    box-sizing: border-box; /* Includes padding and border in dimensions */
-}
-
-/* Individual tiles */
-.tile {
-    width: 40px; /* Increased for better visibility */
-    height: 40px;
-    border: 1px solid #a9a9a9; 
-    background-color: #bfbfbf;
+    text-align: center; /* Center-aligns text */
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    cursor: pointer; /* Indicate interactivity */
+    min-height: 100vh; /* Makes the content vertically centered */
 }
 
-/* Styles for clicked tiles */
-.tile-clicked {
-    background-color: black;
-    border: 1px solid lightgray; /* Slight border change for clicked tiles */
+/* Navigation Bar */
+nav {
+    background-color: #003366; /* Fresno State Blue */
+    width: 100%; /* Stretches across the entire width */
+    padding: 10px 0;
+    margin-bottom: 20px; /* Adds space below the navigation bar */
+    text-align: center; /* Centers navigation links */
 }
 
-/* Number colors for adjacent mines */
-.x1 { color: blue; }
-.x2 { color: green; }
-.x3 { color: red; }
-.x4 { color: navy; }
-.x5 { color: brown; }
-.x6 { color: teal; }
-.x7 { color: black; }
-.x8 { color: gray; }
-
-/* Difficulty dropdown and button styles */
-button, select {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
+nav a {
+    color: white; /* White text */
+    text-decoration: none; /* Removes underline */
+    margin: 0 15px; /* Spacing between links */
+    font-size: 1.1em; /* Slightly larger font */
     font-weight: bold;
-    cursor: pointer;
-    background-color: lightgray;
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+nav a:hover {
+    color: #CE1126; /* Fresno State Red for hover effect */
+}
+
+/* Mines and Time */
+h1 {
+    font-size: 1.8em;
+    margin-top: 20px;
+    margin-bottom: 20px; /* Adds spacing below */
+}
+
+/* Difficulty Dropdown */
+#difficulty-container {
+    margin-bottom: 20px; /* Adds space below the dropdown */
+}
+
+#difficulty {
+    padding: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #003366; /* Fresno State Blue */
     color: white;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease; /* Slower hover effect */
 }
-button:hover, select:hover {
-    background-color: rgb(76, 75, 75);
+
+#difficulty:hover {
+    background-color: #CE1126; /* Fresno State Red */
 }
-button:active, select:active {
-    background-color: black;
+
+/* Board Container */
+#board {
+    display: grid; /* Makes it a grid layout */
+    grid-template-columns: repeat(auto-fill, 40px); /* Auto-adjusts columns based on tile size */
+    gap: 2px; /* Adds space between tiles */
+    justify-content: center; /* Centers the grid horizontally */
+    background-color: #CE1126; /* Fresno State Red Background */
+    padding: 10px;
+    border: 2px solid #003366; /* Fresno State Blue Border */
+}
+
+/* Individual Tiles */
+.tile {
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff; /* White Background for Tiles */
+    border: 1px solid #a9a9a9; /* Light Gray Border */
+    display: flex;
+    align-items: center; /* Centers text vertically */
+    justify-content: center; /* Centers text horizontally */
+    cursor: pointer; /* Pointer cursor to indicate clickable */
+    transition: background-color 0.3s ease; /* Smoother hover effect */
+}
+
+.tile:hover {
+    background-color: #f4f4f4; /* Light Gray for Hover Effect */
+}
+
+.tile-clicked {
+    background-color: #bfbfbf; /* Gray for Clicked Tiles */
+    border: 1px solid lightgray;
+}
+
+/* Restart Button */
+#restart-button {
+    margin-top: 20px; /* Space above the button */
+    padding: 10px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #003366; /* Fresno State Blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease; /* Slower hover effect */
+}
+
+#restart-button:hover {
+    background-color: #CE1126; /* Fresno State Red */
+}
+
+/* Footer */
+footer {
+    background-color: #003366; /* Fresno State Blue */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 0.9em;
 }
