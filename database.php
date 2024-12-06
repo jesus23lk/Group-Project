@@ -15,22 +15,17 @@
   $conn = new mysqli("localhost","root", "", $dbname);
 
   // Check connection to the specific database
-  if ($conn->connect_error) die("Connection to database failed: " . $conn->connect_error);
-  echo "Connected successfully to the database.";
+  $conn->connect_error;
 
   // SQL to create table if it doesn't exist
   $tableSql = "CREATE TABLE IF NOT EXISTS users (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    easy_hs INT(8) DEFAULT 0,
-    medium_hs INT(8) DEFAULT 0,
-    hard_hs INT(8) DEFAULT 0,
+    easy_hs INT(8) DEFAULT NULL,
+    medium_hs INT(8) DEFAULT NULL,
+    hard_hs INT(8) DEFAULT NULL,
     country VARCHAR(255)
   )";
 
-  if ($conn->query($tableSql) === TRUE) echo "Table 'users' created or already exists.<br>";
-  
-  else die("Error creating table: " . $conn->error);
-
-  echo "Setup complete.";
+  $conn->query($tableSql) === TRUE;
