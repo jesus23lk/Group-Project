@@ -4,9 +4,7 @@
 
   session_start();
 
-  $conn = new mysqli("localhost", "root", "", "minesweeper_users");
-
-  if ($conn->connect_error) die("fatal error");
+  require_once "database.php";
 
   if($_SERVER["REQUEST_METHOD"] === "POST") {
 

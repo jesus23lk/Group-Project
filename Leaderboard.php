@@ -1,10 +1,7 @@
 <?php
 
     require_once "check_login.php";
-
-    $conn = new mysqli("localhost", "root", "", "minesweeper_users");
-
-    if ($conn->connect_error) die("fatal error");
+    require_once "database.php";
 
     function getLeaderboard($conn, $column) {
 

@@ -1,12 +1,10 @@
 <?php
 
+  require_once "database.php";
+
   session_start();
   
   if(!isset($_SESSION['user_id'])) header("Location: Login.php");
-
-  $conn = new mysqli("localhost", "root", "", "minesweeper_users");
-
-  if ($conn->connect_error) die("fatal error");
 
   $user_id = $_SESSION['user_id'];
   $score = intval($_POST['score']);

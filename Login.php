@@ -23,6 +23,11 @@
             if (!empty($_GET['error']) && $_GET['error'] == 'invalid_credentials') {
                 echo "<p style='color: red;'>* Incorrect username or password</p>";
             }
+
+            if (!empty($_GET['code']) && $_GET['code'] == 'creation_success') {
+                echo "<p style='color: green;'>Account created successfully, you can now login.</p>";
+            }
+
         ?>
     </div>
 </body>
