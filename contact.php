@@ -1,3 +1,5 @@
+<?php require_once "check_login.php" ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +11,10 @@
 <body>
     <!-- Navigation Bar -->
     <nav>
-        <a href="index.html">Game</a>
-        <a href="Login.html">Login</a>
+        <a href="index.php">Game</a>
         <a href="help.html">Help</a>
-        <a href="Leaderboard.html">Leaderboard</a>
+        <a href="Leaderboard.php">Leaderboard</a>
+        <a href="logout.php">Logout</a>
     </nav>
 
     <!-- Contact Section -->

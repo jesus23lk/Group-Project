@@ -1,3 +1,7 @@
+<!-- This is the game's main page -->
+
+<?php require_once "check_login.php" ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,12 +13,14 @@
 <body>
      <!-- Navigation Bar -->
      <nav>
-        <a href="contact.html">Contact</a>
+        <a href="contact.php">Contact</a>
         <a href="help.html">Help</a>
-        <a href="leaderboard.html">Leaderboard</a>
+        <a href="leaderboard.php">Leaderboard</a>
+        <a href="logout.php">Logout</a>
     </nav>
 
     <h1>
+        <span style="color: black">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span><br>
         Mines: <span id="mines-count">0</span>
         Time: <span id="time-elapsed">000</span>
     </h1>

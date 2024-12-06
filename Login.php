@@ -6,31 +6,24 @@
     <title>Minesweeper Login - Fresno State</title>
     <link rel="stylesheet" href="Login.css">
     <script>
-        // JavaScript to handle login
-        function handleLogin(event) {
-            event.preventDefault(); // Prevent form submission
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            // Simple validation (can be replaced with actual authentication)
-            if (username && password) {
-                // Redirect to the Minesweeper game
-                window.location.href = "index.html";
-            } else {
-                alert("Please enter both username and password.");
-            }
-        }
     </script>
 </head>
 <body>
     <div class="login-container">
         <h1>Fresno State Minesweeper</h1>
         <p>Login to play the game!</p>
-        <form onsubmit="handleLogin(event)">
+        <form action="validate_user.php" method="post">
             <input type="text" id="username" name="username" placeholder="Username" required>
             <input type="password" id="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
+        <br>
+        <a href="create_account.php">Create an account</a>
+        <?php
+            if (!empty($_GET['error']) && $_GET['error'] == 'invalid_credentials') {
+                echo "<p style='color: red;'>* Incorrect username or password</p>";
+            }
+        ?>
     </div>
 </body>
 </html>

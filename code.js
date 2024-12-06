@@ -18,6 +18,15 @@ const g = { // Global object to hold all game variables
     timeInterval: null // Store the interval ID here
 };
 
+
+const sounds = {
+    death: new Audio("GTA_5_Sound_Effect.mp3")
+};
+
+window.onload = function () {
+    setupBoard();
+};
+
 // Event listener for difficulty selection
 document.getElementById("difficulty").addEventListener("change", (e) => {
     const difficulty = e.target.value;
@@ -31,15 +40,8 @@ document.getElementById("difficulty").addEventListener("change", (e) => {
     restartGame();
 });
 
-const sounds = {
-    death: new Audio("GTA_5_Sound_Effect.mp3")
-};
-
-window.onload = function () {
-    setupBoard();
-};
-
 function startTimer() {
+
     const timeElapsed = document.getElementById("time-elapsed");
     let timeString = ""; // Time value to be displayed to the user
     g.numSeconds = 0; // Reset the timer on game start
@@ -65,7 +67,25 @@ function stopTimer() {
     }
 }
 
+function saveHighScore(score) {
+    const xhr = new XMLHttpRequest();
+    const difficulty = document.getElementById("difficulty").value;
+
+    xhr.open("POST", "save_score.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onload = function() {
+
+        if(xhr.status === 200) console.log("success!");
+
+        else console.log("failure");
+    }
+
+    xhr.send(`score=${score}&difficulty=${difficulty}`);
+}
+
 function setMines() { // Random location of mines
+
     let minesLeft = g.minesCount;
 
     while (minesLeft > 0) {
@@ -160,6 +180,7 @@ function revealMines() {
 }
 
 function checkMine(r, c) {
+
     if (r < 0 || r >= g.rows || c < 0 || c >= g.columns) return; // Check for tiles that are out of bounds
     if (g.board[r][c].classList.contains("tile-clicked")) return; // Check for tiles that have already been clicked
     if (g.board[r][c].textContent === "🚩") return; // Check for tiles that have a flag
@@ -181,7 +202,9 @@ function checkMine(r, c) {
     if (minesFound > 0) {
         g.board[r][c].textContent = minesFound;
         g.board[r][c].classList.add("x" + minesFound.toString());
-    } else {
+    } 
+    
+    else {
         checkMine(r - 1, c - 1); // Top-left
         checkMine(r - 1, c);     // Top
         checkMine(r - 1, c + 1); // Top-right
@@ -192,11 +215,13 @@ function checkMine(r, c) {
         checkMine(r + 1, c + 1); // Bottom-right
     }
 
-    // Check if all non-mine tiles have been clicked
     if (g.tilesClicked === g.rows * g.columns - g.minesCount) {
+        //Here we check if the game has been won
+
         document.getElementById("mines-count").textContent = "Cleared";
         g.gameOver = true;
         stopTimer(); // Stop the timer if the game is won
+        saveHighScore(g.numSeconds); //Save the user's current high score
     }
 }
 
